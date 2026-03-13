@@ -1,22 +1,1183 @@
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-file
-*.flf
-#Test results file
-TestResults.xml
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestão Solution RH — Conectando Talentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --card: #161f35;
+    --accent: #00d4aa;
+    --accent2: #4f9eff;
+    --accent3: #ff6b6b;
+    --text: #e8edf5;
+    --muted: #8896b0;
+    --border: rgba(255,255,255,0.07);
+    --glow: rgba(0,212,170,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,15,30,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--bg);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg) !important;
+    padding: 0.55rem 1.3rem;
+    border-radius: 100px;
+    font-weight: 500 !important;
+    transition: opacity 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); color: var(--bg) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 5% 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,212,170,0.12), transparent 70%);
+    top: -100px; right: -100px;
+    animation: float1 8s ease-in-out infinite;
+  }
+
+  .orb2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(79,158,255,0.1), transparent 70%);
+    bottom: 0; left: 10%;
+    animation: float2 10s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(-30px, 40px); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px, -30px); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 750px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.25);
+    color: var(--accent);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  h1 .line2 { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(0,212,170,0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0,212,170,0.4);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-num span { color: var(--accent); }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    padding: 2rem 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .marquee-item svg { color: var(--accent); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 7rem 5%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 500px;
+    font-weight: 300;
+  }
+
+  /* SERVICES */
+  .services-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .service-card:hover { background: #1a2540; }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .icon-green { background: rgba(0,212,170,0.12); }
+  .icon-blue { background: rgba(79,158,255,0.12); }
+  .icon-red { background: rgba(255,107,107,0.12); }
+  .icon-purple { background: rgba(168,85,247,0.12); }
+
+  .service-card h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.01em;
+  }
+
+  .service-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* FEIRÃO SECTION */
+  .feirao-section {
+    background: var(--surface);
+  }
+
+  .feirao-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .feirao-visual {
+    position: relative;
+  }
+
+  .feirao-card-main {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feirao-card-main::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,170,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .event-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,107,107,0.12);
+    color: #ff8a8a;
+    border: 1px solid rgba(255,107,107,0.2);
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+  }
+
+  .event-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .event-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .event-stats {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .event-stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .event-stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .floating-badge {
+    position: absolute;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .badge-top { top: -20px; right: -30px; }
+  .badge-bottom { bottom: -20px; left: -30px; }
+
+  .badge-icon {
+    font-size: 1.5rem;
+  }
+
+  .badge-text { font-size: 0.8rem; }
+  .badge-text strong {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .badge-text span { color: var(--muted); }
+
+  /* PARCERIA */
+  .parceria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .parceria-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .parceria-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,212,170,0.2);
+  }
+
+  .parceria-logo {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .parceria-card h4 {
+    font-family: 'Bebas Neue', cursive;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .parceria-card p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .parceria-tag {
+    display: inline-block;
+    background: rgba(79,158,255,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(79,158,255,0.2);
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 1rem;
+  }
+
+  /* CTA */
+  .cta-section {
+    background: var(--surface);
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(0,212,170,0.08) 0%, rgba(79,158,255,0.06) 100%);
+    border: 1px solid rgba(0,212,170,0.15);
+    border-radius: 32px;
+    padding: 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,170,0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-box h2 { margin-bottom: 1rem; }
+  .cta-box p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* CONTACT */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1.2rem;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: rgba(0,212,170,0.4);
+  }
+
+  .form-group select option { background: var(--card); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 1rem;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .form-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,212,170,0.3);
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+
+  .contact-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .contact-item-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-item-text h4 {
+    font-family: 'Bebas Neue', cursive;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-item-text p { color: var(--muted); font-size: 0.9rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 3rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  .footer-copy {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .feirao-inner { grid-template-columns: 1fr; }
+    .parceria-grid { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .cta-box { padding: 3rem 1.5rem; }
+    .badge-top, .badge-bottom { display: none; }
+    .services-grid { gap: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">GS</div>
+    Gestão Solution <span>RH</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#feirao">Feirão</a></li>
+    <li><a href="#parcerias">Parcerias</a></li>
+    <li><a href="#contato" class="nav-cta">Falar Conosco</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      Conectando pessoas a oportunidades
+    </div>
+    <h1>
+      Transformamos<br>
+      <span class="line2">talentos</span> em<br>
+      carreiras reais
+    </h1>
+    <p class="hero-sub">
+      Soluções completas em gestão de pessoas — desde o primeiro passo
+      na carreira até conexões estratégicas com o mercado.
+    </p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-primary">
+        Quero uma vaga
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#servicos" class="btn-secondary">
+        Nossos serviços
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">+500<span>+</span></div>
+        <div class="stat-label">Candidatos alocados</div>
+      </div>
+      <div>
+        <div class="stat-num">80<span>+</span></div>
+        <div class="stat-label">Empresas parceiras</div>
+      </div>
+      <div>
+        <div class="stat-num">12<span>+</span></div>
+        <div class="stat-label">Feirões realizados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Recrutamento & Seleção
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Feirões de Empregabilidade
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Parcerias com RHs
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Desenvolvimento de Carreira
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Conexão com o Mercado
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Gestão de Talentos
+    </div>
+    <!-- Repeat for infinite scroll -->
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Recrutamento & Seleção
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Feirões de Empregabilidade
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Parcerias com RHs
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Desenvolvimento de Carreira
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Conexão com o Mercado
+    </div>
+    <div class="marquee-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="4"/></svg>
+      Gestão de Talentos
+    </div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="services-header reveal">
+    <div>
+      <div class="section-tag">O que fazemos</div>
+      <h2>Soluções em RH<br>de ponta a ponta</h2>
+    </div>
+    <p class="section-desc">
+      Do mapeamento de perfil ao acompanhamento pós-contratação, entregamos resultados reais para candidatos e empresas.
+    </p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon icon-green">🎯</div>
+      <h3>Recrutamento Estratégico</h3>
+      <p>Identificamos e atraímos os perfis certos para cada oportunidade, com processos ágeis e eficientes alinhados à cultura da empresa.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-blue">🚀</div>
+      <h3>Inserção no Mercado</h3>
+      <p>Apoiamos profissionais em início de jornada a dar seus primeiros passos com segurança, preparação e confiança no mercado de trabalho.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-red">🤝</div>
+      <h3>Feirões de Empregabilidade</h3>
+      <p>Eventos presenciais e online que aproximam candidatos qualificados de empresas que buscam talentos — conexões que transformam trajetórias.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-purple">💼</div>
+      <h3>Consultoria para Empresas</h3>
+      <p>Suporte completo para estruturação de processos seletivos, gestão de pessoas e desenvolvimento de equipes de alta performance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEIRÃO -->
+<section id="feirao" class="feirao-section">
+  <div class="feirao-inner">
+    <div class="reveal">
+      <div class="section-tag">Feirões</div>
+      <h2>Eventos que<br>mudam carreiras</h2>
+      <p class="section-desc" style="margin-bottom: 2rem;">
+        Nossos Feirões de Empregabilidade são pontos de encontro entre candidatos prontos e empresas que crescem. Um único evento pode mudar o rumo profissional de dezenas de pessoas.
+      </p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+        <li style="display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: 0.95rem;">
+          <span style="color: var(--accent); font-size: 1.1rem;">✓</span> Processo de triagem prévia de candidatos
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: 0.95rem;">
+          <span style="color: var(--accent); font-size: 1.1rem;">✓</span> Diversas empresas e áreas de atuação
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: 0.95rem;">
+          <span style="color: var(--accent); font-size: 1.1rem;">✓</span> Orientação e dinâmicas no local
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: 0.95rem;">
+          <span style="color: var(--accent); font-size: 1.1rem;">✓</span> Alta taxa de conversão em contratações
+        </li>
+      </ul>
+      <a href="#contato" class="btn-primary" style="margin-top: 2rem; display: inline-flex;">
+        Participar do próximo feirão
+      </a>
+    </div>
+    <div class="feirao-visual reveal">
+      <div class="feirao-card-main">
+        <div class="event-label">
+          <span>●</span> Próximo evento
+        </div>
+        <div class="event-title">Feirão de<br>Empregabilidade</div>
+        <div class="event-sub">Oportunidades reais para quem está pronto</div>
+        <div class="event-stats">
+          <div>
+            <div class="event-stat-num">+200</div>
+            <div class="event-stat-label">vagas abertas</div>
+          </div>
+          <div>
+            <div class="event-stat-num">30+</div>
+            <div class="event-stat-label">empresas presentes</div>
+          </div>
+        </div>
+      </div>
+      <div class="floating-badge badge-top">
+        <div class="badge-icon">📍</div>
+        <div class="badge-text">
+          <strong>Salvador, BA</strong>
+          <span>Evento presencial</span>
+        </div>
+      </div>
+      <div class="floating-badge badge-bottom">
+        <div class="badge-icon">🏆</div>
+        <div class="badge-text">
+          <strong>Alta conversão</strong>
+          <span>+70% dos participantes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARCERIAS -->
+<section id="parcerias">
+  <div class="reveal" style="text-align: center; max-width: 600px; margin: 0 auto;">
+    <div class="section-tag">Ecossistema</div>
+    <h2>Parcerias que<br>multiplicam resultados</h2>
+    <p class="section-desc" style="margin: 0 auto;">
+      Trabalhamos em rede com outras consultorias e departamentos de RH para ampliar as possibilidades dos nossos clientes.
+    </p>
+  </div>
+  <div class="parceria-grid reveal">
+    <div class="parceria-card">
+      <div class="parceria-logo">🏢</div>
+      <h4>RHs Corporativos</h4>
+      <p>Colaboramos diretamente com equipes internas de RH de médias e grandes empresas, complementando seus processos seletivos.</p>
+      <span class="parceria-tag">Parceiro Estratégico</span>
+    </div>
+    <div class="parceria-card">
+      <div class="parceria-logo">🎓</div>
+      <h4>Instituições de Formação</h4>
+      <p>Conectamos alunos em fase de conclusão de curso com oportunidades alinhadas à sua área de formação.</p>
+      <span class="parceria-tag">Parceiro Educacional</span>
+    </div>
+    <div class="parceria-card">
+      <div class="parceria-logo">🔗</div>
+      <h4>Consultorias de RH</h4>
+      <p>Criamos redes colaborativas entre consultorias, compartilhando banco de talentos e demandas complementares.</p>
+      <span class="parceria-tag">Parceiro Operacional</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box reveal">
+    <h2>Pronto para dar o<br>próximo passo?</h2>
+    <p>Seja para buscar talentos, participar de um feirão ou firmar uma parceria estratégica — estamos aqui para isso.</p>
+    <div class="cta-buttons">
+      <a href="#contato" class="btn-primary">Entrar em contato</a>
+      <a href="#feirao" class="btn-secondary">Ver próximos eventos</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-tag">Contato</div>
+      <h2>Vamos conversar?</h2>
+      <p class="section-desc" style="margin-bottom: 3rem;">
+        Preencha o formulário e nossa equipe retornará o mais breve possível com as melhores opções para você.
+      </p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">📧</div>
+          <div class="contact-item-text">
+            <h4>E-mail</h4>
+            <p>contato@gestaosolutionrh.com.br</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📱</div>
+          <div class="contact-item-text">
+            <h4>WhatsApp</h4>
+            <p>(71) 9 0000-0000</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <h4>Localização</h4>
+            <p>Salvador, Bahia — Brasil</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" placeholder="Seu nome completo">
+          </div>
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" placeholder="(00) 00000-0000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label>Você é</label>
+          <select>
+            <option value="">Selecione uma opção</option>
+            <option>Candidato em busca de oportunidade</option>
+            <option>Empresa buscando talentos</option>
+            <option>RH parceiro</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem</label>
+          <textarea rows="4" placeholder="Como podemos ajudar?"></textarea>
+        </div>
+        <button class="form-submit" onclick="alert('Mensagem enviada! Entraremos em contato em breve.')">
+          Enviar mensagem
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l10-5-4 5 4 5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Gestão Solution <span>RH</span></a>
+  <ul class="footer-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#feirao">Feirões</a></li>
+    <li><a href="#parcerias">Parcerias</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 Gestão Solution RH. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav active state
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+      nav.style.background = 'rgba(10,15,30,0.98)';
+    } else {
+      nav.style.background = 'rgba(10,15,30,0.85)';
+    }
+  });
+</script>
+</body>
+</html>
